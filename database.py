@@ -12,3 +12,5 @@ def start_soldiers_db():
     password TEXT
     )"""
     cursor.execute(text)
+
+print("test")
