@@ -5,7 +5,7 @@ conn = sqlite3.connect("database.db")
 cursor = conn.cursor()
 def start_soldiers_db():
     text = """CREATE TABLE IF NOT EXISTS GUESTS (
-    guest_id INT IDENTITY(1, 1),
+    guest_id INT IDENTITY(1, 1) PRIMARY KEY,
     name TEXT,
     family_name TEXT,
     email TEXT UNIQUE,
@@ -15,7 +15,7 @@ def start_soldiers_db():
 
 def start_hosts_db():
     text = """CREATE TABLE IF NOT EXISTS HOSTS (
-    host_id INT IDENTITY(1,1),
+    host_id INT IDENTITY(1,1) PRIMARY KEY,
     name TEXT,
     family_name TEXT,
     email TEXT UNIQUE,
@@ -25,6 +25,7 @@ def start_hosts_db():
     phone_number INT
     )"""
     cursor.execute(text)
-#
-# start_hosts_db()
-# start_soldiers_db()
+
+def add_guest(name, family, email, password): #can be changed into an object class (simpler probably)
+    text = """INSTERT INTO GUESTS (name, family_name, email, password)
+    VALUES (?,?,?,?)"""
