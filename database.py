@@ -13,4 +13,3 @@ def start_soldiers_db():
     )"""
     cursor.execute(text)
 
-print("test")
