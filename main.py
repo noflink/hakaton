@@ -30,7 +30,7 @@ def check_sign_in_info(email, usertype):
     return
 
 def add_user(usertype):
-
+    pass
 
 
 
