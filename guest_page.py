@@ -230,7 +230,7 @@ def main(page: ft.Page):
     for i in range(12):
         gv.controls.append(
             ft.Container(
-                ft.Text(f"Host name: {posts[i]["host_name"]}"),
+                ft.Text(f"Host name: {i}"),
                 alignment=ft.Alignment.CENTER,
                 bgcolor=ft.Colors.AMBER_100,
                 border=ft.Border.all(1, ft.Colors.AMBER_400),
