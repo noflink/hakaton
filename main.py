@@ -17,6 +17,8 @@ def start_connection():
     #
     pass
 
+def check_login_info(email, password, usertype):
+
 
 
 

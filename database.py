@@ -29,6 +29,7 @@ def start_hosts_db():
     )"""
     cursor.execute(text)
 
+
 def start_posts_db():
     text = """CREATE TABLE IF NOT EXISTS POSTS (
     post_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,7 +40,7 @@ def start_posts_db():
     address TEXT,
     spots INTEGER,
     available INTEGER,
-    CONTENT TEXT
+    content TEXT
     )"""
     cursor.execute(text)
 
@@ -66,6 +67,7 @@ def add_post(host_id, host_name, host_family, city, address, spots, content):
     cursor.execute(text, (host_id, host_name, host_family, city, address, spots, spots, content))
     conn.commit()
 
+
 def get_posts(city):
     text = """SELECT post_id FROM POSTS WHERE city=?"""
     cursor.execute(text, (city,))
@@ -81,15 +83,25 @@ def get_posts(city):
 
     return posts
 
+
 def get_host_posts(host_id):
     text = """SELECT * FROM POSTS WHERE host_id=?"""
     cursor.execute(text, (host_id,))
     return cursor.fetchall()
+
 
 def start():
     start_guests_db()
     start_posts_db()
     start_hosts_db()
 
+
 def check_email(email, usertype):
-    pass
+    text = f"SELECT user_id FROM {usertype} WHERE email=?"
+    cursor.execute(text, (email,))
+
+    if cursor.fetchone()[0] is not None:
+        return False
+    return True
+
+def check_login(email, password, usertype)
