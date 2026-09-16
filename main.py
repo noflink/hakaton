@@ -18,6 +18,18 @@ def start_connection():
     pass
 
 def check_login_info(email, password, usertype):
+    success = db.check_login(email, password, usertype)
+    if success:
+        pass
+    return
+
+def check_sign_in_info(email, usertype):
+    success = db.check_sing_up_email(email, usertype)
+    if success:
+        add_user(usertype)
+    return
+
+def add_user(usertype):
 
 
 
