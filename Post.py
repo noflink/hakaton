@@ -1,2 +1,2 @@
-class Post:
-    def __init__(self):
+# class Post:
+#     def __init__(self):
