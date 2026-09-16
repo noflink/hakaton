@@ -33,6 +33,10 @@ def add_user(usertype):
     pass
 
 
+# post = Post(333222, 3333111, "tehila", "zvulunov",
+#             "ramla", "yosi banai", 3, 3, "dxgfch")
+
+
 
 
 

@@ -11,7 +11,3 @@ class Post:
         self.available = available
         self.content = content
 
-post = Post(333222, 3333111, "tehila", "zvulunov",
-            "ramla", "yosi banai", 3, 3, "dxgfch")
-
-
