@@ -96,7 +96,7 @@ def start():
     start_hosts_db()
 
 
-def check_email(email, usertype):
+def check_sing_up_email(email, usertype):
     text = f"SELECT user_id FROM {usertype} WHERE email=?"
     cursor.execute(text, (email,))
 
@@ -105,4 +105,10 @@ def check_email(email, usertype):
     return True
 
 def check_login(email, password, usertype):
-    pass
+    text = f"SELECT password FROM {usertype} WHERE email=?"
+    cursor.execute(text, (email,))
+
+    if cursor.fetchone()[0] != password:
+        return False
+    return True
+
