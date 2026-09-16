@@ -1,10 +1,9 @@
 class Guest:
-    def __init__(self, guest_id, name, family_name,
-                 email, password):
-        self.guest_id = guest_id
-        self.name = name
-        self.family_name = family_name
-        self.email = email
-        self.password = password
+    def __init__(self, guest_dict):
+        self.guest_id = guest_dict["guest_id"]
+        self.name = guest_dict["name"]
+        self.family_name = guest_dict["family_name"]
+        self.email = guest_dict["email"]
+        self.password = guest_dict["password"]
 
 
