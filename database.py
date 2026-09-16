@@ -1,4 +1,5 @@
 import sqlite3
+import consts
 
 conn = sqlite3.connect("database.db")
 cursor = conn.cursor()
@@ -84,3 +85,11 @@ def get_host_posts(host_id):
     text = """SELECT * FROM POSTS WHERE host_id=?"""
     cursor.execute(text, (host_id,))
     return cursor.fetchall()
+
+def start():
+    start_guests_db()
+    start_posts_db()
+    start_hosts_db()
+
+def check_email(email, usertype):
+    pass
