@@ -1,18 +1,40 @@
-# This is a sample Python script.
+import flet as ft
 
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def main(page: ft.Page):
+    def handle_button_click(e: ft.Event[ft.Button]):
+        message.value = (
+            f"Textboxes values are:  '{tb1.value}', '{tb2.value}'."
+        )
+
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+
+    page.add(
+        ft.SafeArea(
+
+            content=ft.Column(
+
+                controls=[
+                    ft.Text(
+                        value="Log In",
+                        size=50,
+                        weight=ft.FontWeight.W_900,
+                        selectable=True,
+                    ),
+                    tb1 := ft.TextField(label="Email"),
+                    tb2 := ft.TextField(
+                        label="Password"
+                    ),
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+                    ft.Button(content="Submit", on_click=handle_button_click),
+                    message := ft.Text(),
+                ],
+            ),
+        ),
+    )
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    ft.run(main)
