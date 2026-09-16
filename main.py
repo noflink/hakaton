@@ -139,57 +139,85 @@ def main(page: ft.Page):
             ),
         )
 
-    # def build_tiles(items: list[str]) -> list[ft.Control]:
-    #     return [
-    #         ft.ListTile(
-    #             title=ft.Text(item),
-    #             data=item,
-    #             on_click=handle_tile_click,
-    #         )
-    #         for item in items
-    #     ]
-    #
-    # async def handle_tile_click(e: ft.Event[ft.ListTile]):
-    #     await anchor.close_view()
-    #
-    # async def handle_change(e: ft.Event[ft.SearchBar]):
-    #     query = e.control.value.strip().lower()
-    #     matching = (
-    #         [city for city in cities if query in city.lower()] if query else cities]
-    #     )
-    #     anchor.controls = build_tiles(matching)
-    #
-    # def handle_submit(e: ft.Event[ft.SearchBar]):
-    #     print(f"Submit: {e.data}")
-    #
-    # async def handle_tap(e: ft.Event[ft.SearchBar]):
-    #     await anchor.open_view()
-    #
-    # anchor = ft.SearchBar(
-    #     view_elevation=4,
-    #     divider_color=ft.Colors.AMBER,
-    #     bar_hint_text="Select where you want to stay...",
-    #     view_hint_text="Choose a color from the suggestions...",
-    #     on_change=handle_change,
-    #     on_submit=handle_submit,
-    #     on_tap=handle_tap,
-    #     controls=build_tiles(cities),
-    # )
-    # page.add(ft.SafeArea(content=anchor))
-    # gv = ft.GridView(expand=True, max_extent=400, child_aspect_ratio=1)
-    # page.add(gv)
-    #
-    # for i in range(12):
-    #     gv.controls.append(
-    #         ft.Container(
-    #             ft.Text(f"Host name: {posts[i]["host_name"]}"),
-    #             alignment=ft.Alignment.CENTER,
-    #             bgcolor=ft.Colors.AMBER_100,
-    #             border=ft.Border.all(1, ft.Colors.AMBER_400),
-    #             border_radius=ft.BorderRadius.all(10),
-    #         )
-    #     )
-    # page.update()
+
+    ########## RONI ##########
+
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+
+    def handle_button_click(e: ft.Event[ft.Button]):
+        message.value = (
+            f"Textboxes values are:  '{tb1.value}', '{tb2.value}'. "
+
+        )
+
+    page.add(
+        ft.SafeArea(
+            content=ft.Column(
+                controls=[
+                    ft.Text("Log In", size=40, weight=ft.FontWeight.W_600),
+                    tb1 := ft.TextField(label="Email"),
+                    tb2 := ft.TextField(label="Password"),
+
+                    ft.Button(content="Submit", on_click=handle_button_click),
+                    message := ft.Text(),
+                ],
+            ),
+        ),
+    )
+
+    def build_tiles(items: list[str]) -> list[ft.Control]:
+        return [
+            ft.ListTile(
+                title=ft.Text(item),
+                data=item,
+                on_click=handle_tile_click,
+            )
+            for item in items
+        ]
+
+    async def handle_tile_click(e: ft.Event[ft.ListTile]):
+        await anchor.close_view()
+
+    async def handle_change(e: ft.Event[ft.SearchBar]):
+        query = e.control.value.strip().lower()
+        matching = (
+            [city for city in cities if query in city.lower()] if query else cities]
+        )
+        anchor.controls = build_tiles(matching)
+
+    def handle_submit(e: ft.Event[ft.SearchBar]):
+        print(f"Submit: {e.data}")
+
+    async def handle_tap(e: ft.Event[ft.SearchBar]):
+        await anchor.open_view()
+
+    anchor = ft.SearchBar(
+        view_elevation=4,
+        divider_color=ft.Colors.AMBER,
+        bar_hint_text="Select where you want to stay...",
+        view_hint_text="Choose a color from the suggestions...",
+        on_change=handle_change,
+        on_submit=handle_submit,
+        on_tap=handle_tap,
+        controls=build_tiles(cities),
+    )
+    page.add(ft.SafeArea(content=anchor))
+    gv = ft.GridView(expand=True, max_extent=400, child_aspect_ratio=1)
+    page.add(gv)
+
+    for i in range(12):
+        gv.controls.append(
+            ft.Container(
+                ft.Text(f"Host name: {posts[i]["host_name"]}"),
+                alignment=ft.Alignment.CENTER,
+                bgcolor=ft.Colors.AMBER_100,
+                border=ft.Border.all(1, ft.Colors.AMBER_400),
+                border_radius=ft.BorderRadius.all(10),
+            )
+        )
+    page.update()
+
+
 
     #soldier_or_host()
     #soldier_sign_up()
