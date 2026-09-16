@@ -3,7 +3,7 @@ import database as db
 import consts
 import Host
 import Guest
-from database import get_guest
+from typing import *
 
 cities = [
     "Jerusalem",
@@ -102,6 +102,7 @@ cities = [
     "Beitar Illit",
 ]
 user = None
+db.start()
 
 
 def main(page: ft.Page):
@@ -150,7 +151,9 @@ def main(page: ft.Page):
         password = ft.TextField(key="password_textfield", label="Enter password", password=True,
                                 can_reveal_password=True)
         email = ft.TextField(label="email", hint_text="Jane Doe")
-        create_button = ft.Button(content="create", on_click=lambda: handle_guest_sign_up(name.value, last_name.value, email.value, password.value))
+        create_button = ft.Button(content="create",
+                                  on_click=lambda: handle_guest_sign_up(name.value, last_name.value, email.value,
+                                                                        password.value))
 
         page.add(
             ft.SafeArea(
@@ -176,10 +179,14 @@ def main(page: ft.Page):
         i_d = ft.TextField(label="id")
         address = ft.TextField(label="address", hint_text="Jane Doe")
         phone_number = ft.TextField(label="phone number", hint_text="Jane Doe")
-        password = ft.TextField(key="password_textfield", label="Enter password", password=True,can_reveal_password=True)
+        password = ft.TextField(key="password_textfield", label="Enter password", password=True,
+                                can_reveal_password=True)
         email = ft.TextField(label="email", hint_text="Jane Doe")
         city = ft.TextField(label="City", hint_text="Jane Doe")
-        create_button = ft.Button(content="create", on_click=lambda: handle_host_sign_up(name.value, last_name.value, email.value,password.value, i_d.value, address.value, phone_number.value, city.value))
+        create_button = ft.Button(content="create",
+                                  on_click=lambda: handle_host_sign_up(name.value, last_name.value, email.value,
+                                                                       password.value, i_d.value, address.value,
+                                                                       phone_number.value, city.value))
 
         page.add(
             ft.SafeArea(
@@ -206,7 +213,7 @@ def main(page: ft.Page):
         host_name = ft.TextField(label="Name", hint_text="Jane Doe")
         host_last_name = ft.TextField(label="Last_Name", hint_text="Jane Doe")
         spots = ft.TextField(label="How many spots", hint_text="Jane Doe")
-        add = ft.Button(content="+")
+        add = ft.Button(content="+", on_click=lambda: add_post(spots.value, content.value))
         content = ft.TextField(
             key="styled_textfield",
             text_size=15,
@@ -250,6 +257,12 @@ def main(page: ft.Page):
             ),
         )
 
+    def add_post(spots, content):
+        print("adding post")
+        global user
+        spots = int(spots)
+        db.add_post(user.host_id, user.name, user.host_family, user.city, user.address, spots, content, "1.1.1")
+        host_page()
 
     ########## RONI ##########
 
@@ -258,7 +271,8 @@ def main(page: ft.Page):
         page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         page.vertical_alignment = ft.MainAxisAlignment.CENTER
         page.appbar = ft.AppBar(title=ft.Text("Log in screen"), center_title=True)
-        password = ft.TextField(key="password_textfield", label="Enter password", password=True,can_reveal_password=True)
+        password = ft.TextField(key="password_textfield", label="Enter password", password=True,
+                                can_reveal_password=True)
         email = ft.TextField(label="email", hint_text="Jane Doe")
         create_button = ft.Button(content="create", on_click=lambda: check_login(email.value, password.value))
 
@@ -266,18 +280,18 @@ def main(page: ft.Page):
             ft.SafeArea(
                 content=ft.Column(
                     controls=[
-                        password,
                         email,
+                        password,
                         create_button,
                     ]
                 )
             ),
         )
 
-
     def check_login(email, password):
         global user
         success, usertype = db.check_login(email, password)
+        print(f"{success}: {usertype}")
         if success:
             if usertype == consts.HOSTS:
                 host_dict = db.get_host(email)
@@ -286,7 +300,8 @@ def main(page: ft.Page):
             elif usertype == consts.GUESTS:
                 guest_dict = db.get_guest(email)
                 user = Guest.Guest(guest_dict)
-                guest_page()
+                posts = db.get_all_posts()
+                guest_page(posts)
 
     def handle_host_sign_up(name, family, email, password, id, address, phone, city):
         global user
@@ -300,9 +315,6 @@ def main(page: ft.Page):
         user = Guest.Guest(db.get_guest(email))
         posts = db.get_all_posts()
         guest_page(posts)
-
-
-
 
     def guest_page(posts):
         page.clean()
@@ -331,8 +343,10 @@ def main(page: ft.Page):
             get_posts(e.data)
 
         def get_posts(city):
-            db.get_posts(city)
-            guest_page(posts)
+            if city == "":
+                guest_page(db.get_all_posts())
+                return
+            guest_page(db.get_posts(city))
 
         async def handle_tap(e: ft.Event[ft.SearchBar]):
             await anchor.open_view()
@@ -341,7 +355,7 @@ def main(page: ft.Page):
             view_elevation=4,
             divider_color=ft.Colors.AMBER,
             bar_hint_text="Select where you want to stay...",
-            view_hint_text="Choose a color from the suggestions...",
+            view_hint_text="Choose a city from the suggestions...",
             on_change=handle_change,
             on_submit=handle_submit,
             on_tap=handle_tap,
@@ -351,10 +365,11 @@ def main(page: ft.Page):
         gv = ft.GridView(expand=True, max_extent=400, child_aspect_ratio=1)
         page.add(gv)
 
-        for i in range(12):
+        for i in range(len(posts)):
             gv.controls.append(
                 ft.Container(
-                    ft.Text(f"Host name: {i}"),
+                    ft.Text(f"Host name: {posts[i]["host_name"]},\n"
+                            f"Content: {posts[i]["content"]}"),
                     alignment=ft.Alignment.CENTER,
                     bgcolor=ft.Colors.AMBER_100,
                     border=ft.Border.all(1, ft.Colors.AMBER_400),
@@ -363,16 +378,12 @@ def main(page: ft.Page):
             )
         page.update()
 
-
-
-
-
     # guest_page()
     # log_in()
-    #soldier_or_host()
-    #soldier_sign_up()
-    #host_sign_up()
-    #host_page()
+    # soldier_or_host()
+    # soldier_sign_up()
+    # host_sign_up()
+    # host_page()
     start_screen()
 
 

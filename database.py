@@ -63,10 +63,11 @@ def add_host(name, family, email, password, id, address, phone, city):
     conn.commit()
 
 
-def add_post(host_id, host_name, host_family, city, address, spots, content):
-    text = """INSERT INTO POSTS (host_id, host_name, host_family, city, address, spots, available, content)
-    VALUES (?,?,?,?,?,?,?,?)"""
-    cursor.execute(text, (host_id, host_name, host_family, city, address, spots, spots, content))
+def add_post(host_id, host_name, host_family, city, address, spots, content, date):
+    print("adding...")
+    text = """INSERT INTO POSTS (host_id, host_name, host_family, city, address, spots, available, content, date)
+    VALUES (?,?,?,?,?,?,?,?,?)"""
+    cursor.execute(text, (host_id, host_name, host_family, city, address, spots, spots, content, date))
     conn.commit()
 
 
@@ -104,9 +105,12 @@ def get_guest(email):
     return guest
 
 def get_host(email):
-    text = f"SELECT * FROM GUESTS WHERE email=?"
+    text = f"SELECT * FROM HOSTS WHERE email=?"
     cursor.execute(text, (email,))
     item = cursor.fetchone()
+    if item is None:
+        return None
+    print(item)
     host = turn_host_to_dict(item)
     return host
 
@@ -182,3 +186,20 @@ def turn_host_to_dict(item):
             "phone_number": item[7],
             "city" : item[8]
             }
+#
+# start_posts_db()
+# add_post(1,"bo","grahm", "Rehovot", "Asdfa",6, "hello hellodfg hello", "1.2.244")
+# add_post(1,"bo","grahm", "Rehovot", "Asdfa",6, "hello hello heggllo", "1.2.34")
+# add_post(1,"bo","grahm", "Rehovot", "Asdfa",6, "hello hdfgdello hello", "1.2.6")
+# add_post(1,"bo","grahm", "Rehovot", "Asdfa",6, "hello hello hello", "1.2.4")
+# add_post(1,"bo","grahm", "Rehovot", "Asdfa",6, "hello hello hellasao", "1.2.3")
+# add_post(1,"bo","grahm", "Rehovot", "Asdfa",6, "hello hello helsdlo", "1.2.3")
+# add_post(1,"bo","grahm", "Rehovot", "Asdfa",6, "hello sdfsdfshello hello", "1.2.3")
+# add_post(1,"bo","grahm", "Tel Aviv", "Asdfa",6, "hello xcvfbbzd hello", "1.2.3")
+# add_post(1,"bo","grahm", "Tel Aviv", "Asdfa",6, "hello hello", "1.2.3")
+# add_post(1,"bo","grahm", "Tel Aviv", "Asdfa",6, "hello sdfshello hello", "1.2.3")
+# add_post(1,"bo","grahm", "Tel Aviv", "Asdfa",6, "hello sdfsdfshdfhdfghdfello hello", "1.2.3")
+# add_post(1,"bo","grahm", "Tel Aviv", "Asdfa",6, "hello sdfsdfshello hellfgso", "1.2.3")
+# add_post(1,"bo","grahm", "Tel Aviv", "Asdfa",6, "hello sdfsdfshello heldddlo", "1.2.3")
+# add_post(1,"bo","grahm", "Tel Aviv", "Asdfa",6, "hello sdfsdfshello hellosada", "1.2.3")
+# add_post(1,"bo","grahm", "Tel Aviv", "Asdfa",6, "hello sdfsdfshello grgrgghello", "1.2.3")
